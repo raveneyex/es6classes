@@ -225,7 +225,7 @@
                 </section>
 
                 <section>
-                    <h1>Computed Method Names</h1>
+                    <h2>Computed Method Names</h2>
                     <p>Use expressions to define prototype method names by inserting them into square brackets</p>
                     <pre>
                         <code class="hljs">
@@ -259,24 +259,234 @@ console.log(rei.identify());
 
             <section>
                 <section>
-                    <h1>SUB CLASSING</h1>
-                    <h3>The trivial use-case</h3>
+                    <h1>Sub Classing</h1>
+                    <p>The <span class="code-inline">extend</span> clause lets you create a subclass of an existing constructor.</p>
+                    <p>The <span class="code-inline">base-class</span> may or may have not been defined via Class</p>
+                    <p>The <span class="code-inline">extend</span> clause expects an <span class="code-inline">Expression</span> as its operand (more on this later on)</p>
+                    <p>You can only <span class="code-inline">extend</span> from one Base-class at a time</p>
                 </section>
 
                 <section>
-                    <h1>SUPERCONSTRUCTOR CALLS</h1>
+                    <h1>Sub Classing</h1>
+                    <pre>
+                        <code class="hljs">
+    class Cyborg extends Human {
+        constructor(name){
+            super(name);
+        }
+        identify() {
+            return `Hello, I'm ${this._name} and I'm a ${Cyborg.name}`;
+        }
+    }
+    const t1000 = new Cyborg("Arnold");
+    console.log(t1000.identify());
+    console.log(t1000 instanceof Cyborg);
+    console.log(t1000 instanceof Human);
+                        </code>
+                    </pre>
                 </section>
 
                 <section>
-                    <h1>DEFAULT CONSTRUCTORS</h1>
+                    <h1>Sub-Classing</h1>
+                    <p>
+                        The <span class="code-inline">base-class</span> may or may have not been defined via Class
+                    </p>
+                    <p>What does that even mean?</p>
+                    <pre>
+                        <code class="hljs">
+    function Human(name) {
+        this._name = name;
+        this.identify = function identify() {
+            return `Hello, I'm ${this._name} and I'm a ${Human.name}`;
+        };
+    };
+    class Cyborg extends Human {
+    ...
+    console.log(t1000 instanceof Cyborg);
+    console.log(t1000 instanceof Human);
+                        </code>
+                    </pre>
                 </section>
 
                 <section>
-                    <h1>SUB CLASSING BUILT-IN CONSTRUCTORS</h1>
+                    <h2>Superconstructor Calls</h2>
+                    <p>In a derived class, you MUST call <span class="code-inline">super()</span> before being able to use <span class="code-inline">this</span></p>
+                    <p>The reason is that in ES6 classes, base classes are the ones that actually create the object instance.</p>
+                    <pre>
+                        <code class="hljs">
+    class Cyborg extends Human {
+        constructor(name, skill){
+            this._skill = skill; //ReferenceError
+            super(name);
+            this._skill = skill; //OK
+        }
+    ...
+    const molly = new Cyborg('Molly Millions', 'Hypervision');
+    console.log(molly._skill);
+                        </code>
+                    </pre>
                 </section>
 
                 <section>
-                    <h1>MULTIPLE INHERITANCE</h1>
+                    <h2>Default Constructors</h2>
+                    <p>Classes ALWAYS have a constructor, even when you don't explicitly define it.</p>
+                    <p>Again, the reason for this is that the constructor of a base class MUST be called to be able to obtain the object instance</p>
+                    <pre>
+                        <code class="hljs">
+    constructor() {}    //implicit constructor for base-classes
+                    
+    constructor(...args){ //implicit constructor for derived-classes
+        super(...args);
+    }
+                        </code>
+                    </pre>
+                </section>
+
+                <section>
+                    <h2>Sub-Classing Built-in Constructors</h2>
+                    <p>
+                        In ES6 we can (finally) extend built-in constructors as if they were any other base class
+                    </p>
+                    <p>
+                        NOT available via transpilers (Babel.js). Engines need to implement this directly.
+                    </p>
+                    <pre>
+                        <code class="hljs">
+    class CustomError extends Error {
+    };
+    throw new CustomError("Ups! we're fucked!"); //we now have a StackTrace!
+                        </code>
+                    </pre>
+                </section>
+
+                <section>
+                    <h2>Multiple Inheritance</h2>
+                    <p>The power of <span class="code-inline">extend</span> taking in an expression as operand instead of just an identifier</p>
+                    <pre>
+                        <code class="hljs">
+    class Foo extends Bar {
+        //Foo and Bar are both Classes
+    } 
+    class Foo extends chain() {
+        //chain() is a function that returns a Class/Constructor-function
+    } 
+    class Foo extends alpha {
+        //where alpha is a variable whose value is a Class/Constructor-function
+    } 
+                        </code>
+                    </pre>
+                </section>
+
+                <section>
+                    <h2>Multiple Inheritance</h2>
+                    <p>How to take advantage of that to achieve multiple inheritance?</p>
+                    <pre>
+                        <code class="hljs">
+    //Cyborg extends Hybryd, Human
+    class Human{
+        constructor(name) {
+            this._name = name;
+        }
+    }
+    const Hybrid = (superClass) => class extends superClass {
+        isHybrid() {
+            return 'I´m a hybrid';
+        }
+    };
+    class Cyborg extends Hybrid(Human) {
+        identify () {
+            return `Hello, I´m ${this._name}, and ${this.isHybrid()}`;
+        }
+    }
+                        </code>
+                    </pre>
+                </section>
+
+                <section>
+                    <h2>Multiple Inheritance</h2>
+                    <pre>
+                        <code class="hljs">
+    const jonny = new Cyborg("Jonny");
+    console.log(jonny.isHybrid());
+    console.log(jonny.identify());
+    console.log(jonny instanceof Human);
+    console.log(jonny instanceof Cyborg);
+                        </code>
+                    </pre>
+                </section>
+
+                <section>
+                    <h2>Multiple Inheritance</h2>
+                    <pre>
+                        <code class="hljs">
+    console.log(jonny instanceof Hybrid); //TypeError
+    Hybrid.prototype = Human.prototype;
+    console.log(jonny instanceof Hybrid); //Now we're good
+                        </code>
+                    </pre>
+                </section>
+            </section>   
+
+            <section>
+                <section>
+                    <h1>Prototype Chains</h1>
+                    <p>
+                        JavaScript's flavor of inheritance is called <span class="code-inline">Prototypal Inheritance</span> because it relies on <span class="code-inline">prototype</span> properties to inherit methods and data.
+                    </p>
+                </section>
+
+                <section>
+                    <h2>Prototype Chains: Base Class and its Instance</h1>
+                    <figure style="margin-bottom: 10px">
+                        <img src="assets/PROTO-BASE.png" style="max-width:75%;max-height:75%;margin-bottom:15px;" >
+                        <figcaption>A base-class prototype chains</figcaption>
+                    </figure>
+                </section>
+
+                <section>
+                    <h2>Prototype Chains: Base Class and its Instance</h1>
+                    <pre>
+                        <code class="hljs">
+    const molly = new Human("Molly");
+    console.log(Human instanceof Function); 
+    console.log(molly instanceof Human); 
+    console.log(Human.prototype instanceof Object);
+    console.log(Human === Human.prototype.constructor);
+    console.log(Object.getPrototypeOf(Human) === Function.prototype); 
+    console.log(Object.getPrototypeOf(Human.prototype) === Object.prototype); 
+    console.log(Object.getPrototypeOf(molly) === Human.prototype); 
+                        </code>
+                    </pre>
+                </section>
+
+                <section>
+                    <h2>Prototype Chains: Base and Derived Classes</h2>
+                    <figure style="margin-bottom: 10px">
+                        <img src="assets/PROTO-DERIVED.png" 
+                            style="max-width:65%;max-height:65%;margin-bottom:0px;">
+                        <figcaption>Full prototype chain</figcaption>
+                    </figure>
+                </section>
+
+                <section>
+                    <h2>Prototype Chains: Base and Derived Classes</h2>
+                    <pre>
+                        <code class="hljs">
+    const molly = new Cyborg("Molly", "Hypervision");
+    console.log(Human instanceof Function); 
+    console.log(molly instanceof Human); 
+    console.log(molly instanceof Cyborg);
+    console.log(Human.prototype instanceof Object); 
+    console.log(Cyborg.prototype instanceof Human);
+    console.log(Human === Human.prototype.constructor);
+    console.log(Cyborg === Cyborg.prototype.constructor);
+    console.log(Object.getPrototypeOf(Cyborg) === Human);
+    console.log(Object.getPrototypeOf(Human) === Function.prototype);
+    console.log(Object.getPrototypeOf(molly) === Cyborg.prototype);
+    console.log(Object.getPrototypeOf(Cyborg.prototype) === Human.prototype);
+    console.log(Object.getPrototypeOf(Human.prototype) === Object.prototype);
+                        </code>
+                    </pre>
                 </section>
             </section>
 
@@ -300,10 +510,6 @@ console.log(rei.identify());
                 <section>
                     <h1>VIA SYMBOLS</h1>
                 </section>
-            </section>
-
-            <section>
-                <h1>PROTOTYPE CHAINS</h1>
             </section>
 
         </div>
