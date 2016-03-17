@@ -52,6 +52,7 @@
                     <h1>Base Classes</h1>
                     <pre>
                         <code class="hljs">
+    /*  /js/examples/base-class.js */
     class Human {
         constructor(name){
           this.name = name;
@@ -75,6 +76,7 @@
                     <p>ES6 Classes are just a more concise way to declare constructor functions</p>
                     <pre>
                         <code class="hljs">
+    /*  /js/examples/base-class.js */
     > console.log(typeof(Human));
     function
                         </code>
@@ -93,6 +95,7 @@
                     <p>Class expressions can be anonymous:</p>
                     <pre>
                         <code class="hljs">
+    /*  /js/examples/class-expressions1.js  */
     const MyHuman = class {
         constructor(name){
           this.name = name;
@@ -113,6 +116,7 @@
                     <p>Class expressions can have inner names only visible to them:</p>
                     <pre>
                         <code class="hljs">
+    /*  /js/examples/class-expressions2.js     */
     const MyHuman = class Human {
         constructor(name){
           this.name = name;
@@ -134,6 +138,7 @@
                     <h1>Class Declarations</h1>
                     <pre>
                         <code class="hljs">
+    /*  /js/examples/class-declaration.js   */
     class Human {
         constructor(name){
           this.name = name;
@@ -157,6 +162,7 @@
                     <p>There can only be one <span class="code-inline">constructor</span> per Class definition</p>
                     <pre>
                         <code class="hljs">
+    /*  /js/examples/class-declaration.js   */               
     constructor(name){
         this.name = name;
     }
@@ -172,6 +178,7 @@
                     <p>Created by prefixing a method with <span class="code-inline">static</span>.</p>
                     <pre>
                         <code class="hljs">
+    /*  /js/examples/class-declaration.js   */
     static sayRace() {
         return Human.name;
     }
@@ -188,6 +195,7 @@
                     <p>Called <span class="code-inline">prototype methods</span> because they will be properties of the Class <span class="code-inline">prototype</span> (more on this later).</p>
                     <pre>
                         <code class="hljs">
+    /*  /js/examples/class-declaration.js   */
     identify() {
         return `Hello, I'm ${this.name}`;
     }
@@ -204,6 +212,7 @@
                     <p>Their syntax is just like getters &amp; setters from ES5 Object Literals</p>
                     <pre>
                         <code class="hljs">
+    /*  /js/examples/getter-setter.js    */
     constructor(name){
         this._name = name;
     }
@@ -229,17 +238,18 @@
                     <p>Use expressions to define prototype method names by inserting them into square brackets</p>
                     <pre>
                         <code class="hljs">
-class Human {
-    constructor(name){
-        this._name = name;
-    }
+    /*  /js/examples/computed-properties.js     */
+    class Human {
+        constructor(name){
+            this._name = name;
+        }
 
-    ['id'+'entify']() {
-        return `Hello, I'm ${this._name}`;
+        ['id'+'entify']() {
+            return `Hello, I'm ${this._name}`;
+        }
     }
-}
-const rei = new Human('Rei Toei');
-console.log(rei.identify());
+    const rei = new Human('Rei Toei');
+    console.log(rei.identify());
                         </code>
                     </pre>
                 </section>
@@ -270,6 +280,7 @@ console.log(rei.identify());
                     <h1>Sub Classing</h1>
                     <pre>
                         <code class="hljs">
+    /*  /js/examples/sub-classing1.js    */
     class Cyborg extends Human {
         constructor(name){
             super(name);
@@ -294,6 +305,7 @@ console.log(rei.identify());
                     <p>What does that even mean?</p>
                     <pre>
                         <code class="hljs">
+    /*  /js/examples/sub-classing2.js   */
     function Human(name) {
         this._name = name;
         this.identify = function identify() {
@@ -314,6 +326,7 @@ console.log(rei.identify());
                     <p>The reason is that in ES6 classes, base classes are the ones that actually create the object instance.</p>
                     <pre>
                         <code class="hljs">
+    /*  /js/examples/super-calls.js     */
     class Cyborg extends Human {
         constructor(name, skill){
             this._skill = skill; //ReferenceError
@@ -352,6 +365,7 @@ console.log(rei.identify());
                     </p>
                     <pre>
                         <code class="hljs">
+    /*  /js/examples/builtin-constructors.js    */
     class CustomError extends Error {
     };
     throw new CustomError("Ups! we're fucked!"); //we now have a StackTrace!
@@ -382,6 +396,7 @@ console.log(rei.identify());
                     <p>How to take advantage of that to achieve multiple inheritance?</p>
                     <pre>
                         <code class="hljs">
+    /*  /js/examples/multiple-inheritance.js    */
     //Cyborg extends Hybryd, Human
     class Human{
         constructor(name) {
@@ -406,6 +421,7 @@ console.log(rei.identify());
                     <h2>Multiple Inheritance</h2>
                     <pre>
                         <code class="hljs">
+    /*  /js/examples/multiple-inheritance.js    */
     const jonny = new Cyborg("Jonny");
     console.log(jonny.isHybrid());
     console.log(jonny.identify());
@@ -419,6 +435,7 @@ console.log(rei.identify());
                     <h2>Multiple Inheritance</h2>
                     <pre>
                         <code class="hljs">
+    /*  /js/examples/multiple-inheritance.js    */
     console.log(jonny instanceof Hybrid); //TypeError
     Hybrid.prototype = Human.prototype;
     console.log(jonny instanceof Hybrid); //Now we're good
@@ -447,6 +464,7 @@ console.log(rei.identify());
                     <h2>Prototype Chains: Base Class and its Instance</h1>
                     <pre>
                         <code class="hljs">
+    /*  /js/examples/prototype-base.js  */
     const molly = new Human("Molly");
     console.log(Human instanceof Function); 
     console.log(molly instanceof Human); 
@@ -472,6 +490,7 @@ console.log(rei.identify());
                     <h2>Prototype Chains: Base and Derived Classes</h2>
                     <pre>
                         <code class="hljs">
+    /*  /js/examples/prototype-derived.js   */
     const molly = new Cyborg("Molly", "Hypervision");
     console.log(Human instanceof Function); 
     console.log(molly instanceof Human); 
@@ -500,6 +519,7 @@ console.log(rei.identify());
                     <h2>In a Constructor Environment</h2>
                     <pre>
                         <code class="hljs">
+    /* /js/examples/private-via-constructor.js  */
     class Human{
         constructor(name) {
             Object.assign(this, {
@@ -520,6 +540,7 @@ console.log(rei.identify());
                     <h2>In a Constructor Environment</h2>
                     <pre>
                         <code class="hljs">
+    /* /js/examples/private-via-constructor.js  */
     const billy = new Human("Billy");
     console.log(billy.name);
     console.log(billy.getName());
@@ -550,6 +571,7 @@ console.log(rei.identify());
                     <h2>Via Naming Convention</h2>
                     <pre>
                         <code class="hljs">
+    /*  /js/examples/private-via-naming.js  */
     class Human{
         constructor(name) {
             this._name = name;
@@ -569,6 +591,7 @@ console.log(rei.identify());
                     <h2>Via Naming Convention</h2>
                     <pre>
                         <code class="hljs">
+    /*  /js/examples/private-via-naming.js  */
     const barack = new Human("Barack");
     console.log(barack._name);
     console.log(barack.name);
@@ -601,6 +624,7 @@ console.log(rei.identify());
                     <h2>Via WeakMaps</h2>
                     <pre>
                         <code class="hljs">
+    /*  /js/examples/private-via-weakmaps.js    */
     const _name = new WeakMap();
     class Human{
         constructor(name) {
@@ -621,6 +645,7 @@ console.log(rei.identify());
                     <h2>Via WeakMaps</h2>
                     <pre>
                         <code class="hljs">
+    /*  /js/examples/private-via-weakmaps.js    */
     const albert = new Human("Albert Hoffman");
     console.log(albert.name);
     albert.name = "Hoffman Albert";
@@ -653,18 +678,19 @@ console.log(rei.identify());
                     <h1>Via Symbols</h1>
                     <pre>
                         <code class="hljs">
-const _name = Symbol('Name');
-class Human{
-    constructor(name) {
-        this[_name] = name;
+    /*  /js/examples/private-via-symbol.js  */
+    const _name = Symbol('Name');
+    class Human{
+        constructor(name) {
+            this[_name] = name;
+        }
+        get name () {
+            return this[_name];
+        }
+        set name (name) {
+            this[_name] = name;
+        }
     }
-    get name () {
-        return this[_name];
-    }
-    set name (name) {
-        this[_name] = name;
-    }
-}
                         </code>
                     </pre>
                 </section>
@@ -673,6 +699,7 @@ class Human{
                     <h1>Via Symbols</h1>
                     <pre>
                         <code class="hljs">
+    /*  /js/examples/private-via-symbol.js  */
     const albert = new Human("Albert Hoffman");
     console.log(albert.name);
     albert.name = "Hoffman Albert";
