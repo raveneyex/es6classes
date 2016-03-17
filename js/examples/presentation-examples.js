@@ -264,7 +264,6 @@
   console.log(Object.getPrototypeOf(Human) === Function.prototype); //[[Prototype]] of Human is Function.prototype
   console.log(Object.getPrototypeOf(Human.prototype) === Object.prototype); //[[Prototype]] of Human.prototype is Object.prototype
   console.log(Object.getPrototypeOf(molly) === Human.prototype); //[[Prototype]] of molly is Human.prototype
-
 }());
 
 (()=>{
@@ -319,7 +318,7 @@
 }());
 
 (()=>{
-  /*  TAG 15: Constructor Environment */
+  /*  TAG 15: Naming Convention */
   'use strict'
   class Human{
     constructor(name) {
@@ -365,7 +364,7 @@
 }());
 
 (()=>{
-  /*  TAG 17: WeakMap */
+  /*  TAG 17: Symbol */
   'use strict'
   const _name = Symbol('Name');
   class Human{

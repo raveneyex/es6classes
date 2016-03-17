@@ -492,24 +492,222 @@ console.log(rei.identify());
 
             <section>
                 <section>
-                    <h1>PRIVATE DATA</h1>
+                    <h1>Private Data</h1>
+                    <h3>Strategies for declaring "private" Class members</h3>
                 </section>
 
                 <section>
-                    <h1>IN A CONSTRUCTOR ENVIRONMENT</h1>
+                    <h2>In a Constructor Environment</h2>
+                    <pre>
+                        <code class="hljs">
+    class Human{
+        constructor(name) {
+            Object.assign(this, {
+                getName () {
+                    return name;
+                },
+                setName (_name){
+                    name = _name;
+                } 
+            });
+        }
+    }
+                        </code>
+                    </pre>
                 </section>
 
                 <section>
-                    <h1>VIA NAMING CONVENTION</h1>
+                    <h2>In a Constructor Environment</h2>
+                    <pre>
+                        <code class="hljs">
+    const billy = new Human("Billy");
+    console.log(billy.name);
+    console.log(billy.getName());
+    billy.setName("Juancho");
+    console.log(billy.getName());
+                        </code>
+                    </pre>
                 </section>
 
                 <section>
-                    <h1>VIA WEAK-MAPS</h1>
+                    <h2>In a Constructor Environment</h2>
+                    <p> PROS
+                        <ul>
+                            <li>Data is safe</li>
+                            <li>Names won't clash with sub or super classes</li>
+                        </ul>
+                    </p>
+                    <p> CONS
+                        <ul>
+                            <li>Code is not elegant</li>
+                            <li>Entire Class definition in Constructor</li>
+                            <li>Methods are instance methods, not prototype methods</li>
+                        </ul>
+                    </p>
                 </section>
 
                 <section>
-                    <h1>VIA SYMBOLS</h1>
+                    <h2>Via Naming Convention</h2>
+                    <pre>
+                        <code class="hljs">
+    class Human{
+        constructor(name) {
+            this._name = name;
+        }
+        get name () {
+            return this._name;
+        }
+        set name (name) {
+            this._name = name;
+        }
+    }
+                        </code>
+                    </pre>
                 </section>
+
+                <section>
+                    <h2>Via Naming Convention</h2>
+                    <pre>
+                        <code class="hljs">
+    const barack = new Human("Barack");
+    console.log(barack._name);
+    console.log(barack.name);
+    barack.name = "Obama";
+    console.log(barack.name);
+    console.log(barack._name);
+    barack._name = "Hussein";
+    console.log(barack.name);
+                        </code>
+                    </pre>
+                </section>
+
+                <section>
+                    <h2>Via Naming Convention</h2>
+                    <p> PROS
+                        <ul>
+                            <li>Code looks good</li>
+                            <li>Memory is not wasted</li>
+                        </ul>
+                    </p>
+                    <p> CONS
+                        <ul>
+                            <li>Data is not safe</li>
+                            <li>Is just a convention</li>
+                        </ul>
+                    </p>
+                </section>
+
+                <section>
+                    <h2>Via WeakMaps</h2>
+                    <pre>
+                        <code class="hljs">
+    const _name = new WeakMap();
+    class Human{
+        constructor(name) {
+            _name.set(this, name);
+        }
+        get name () {
+            return _name.get(this);
+        }
+        set name (name) {
+            _name.set(this, name);
+        }
+    }
+                        </code>
+                    </pre>
+                </section>
+
+                <section>
+                    <h2>Via WeakMaps</h2>
+                    <pre>
+                        <code class="hljs">
+    const albert = new Human("Albert Hoffman");
+    console.log(albert.name);
+    albert.name = "Hoffman Albert";
+    console.log(albert.name);
+    console.log(albert._name);
+                        </code>
+                    </pre>
+                </section>
+
+                <section>
+                    <h2>Via WeakMaps</h2>
+                    <p> PROS
+                        <ul>
+                            <li>Code looks elegant</li>
+                            <li>Memory is not wasted</li>
+                            <li>Names of private properties won't clash</li>
+                            <li>Data is safe</li>
+                        </ul>
+                    </p>
+                    <p> CONS
+                        <ul>
+                            <li>WeakMaps have to be hidden from the outside world</li>
+                            <li>Still feels like a Hack</li>
+                            <li>If WeakMap.prototype is modified, code might break</li>
+                        </ul>
+                    </p>
+                </section>
+
+                <section>
+                    <h1>Via Symbols</h1>
+                    <pre>
+                        <code class="hljs">
+const _name = Symbol('Name');
+class Human{
+    constructor(name) {
+        this[_name] = name;
+    }
+    get name () {
+        return this[_name];
+    }
+    set name (name) {
+        this[_name] = name;
+    }
+}
+                        </code>
+                    </pre>
+                </section>
+
+                <section>
+                    <h1>Via Symbols</h1>
+                    <pre>
+                        <code class="hljs">
+    const albert = new Human("Albert Hoffman");
+    console.log(albert.name);
+    albert.name = "Hoffman Albert";
+    console.log(albert.name);
+    console.log(albert._name);
+                        </code>
+                    </pre>
+                </section>
+
+                <section>
+                    <h1>Via Symbols</h1>
+                    <p> PROS
+                        <ul>
+                            <li>Memory is not wasted</li>
+                            <li>Data is *relatively* Safe</li>
+                            <li>Names of private properties won't clash</li>
+                        </ul>
+                    </p>
+                    <p> CONS
+                        <ul>
+                            <li>Not pretty</li>
+                            <li>There IS a way to access the properties</li>
+                        </ul>
+                    </p>
+                </section>
+            </section>
+
+            <section>
+                <h2>References</h2>
+                <ul>
+                    <li><a href="http://es6-features.org/">ES6-Features</a></li>
+                    <li><a href="http://exploringjs.com/">ExploringJS</a></li>
+                    <li><a href="http://speakingjs.com/">Speaking.js</a></li>
+                    <li><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript">MDN</a></li>
+                </ul>
             </section>
 
         </div>

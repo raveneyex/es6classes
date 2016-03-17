@@ -1,21 +1,21 @@
 (()=>{
-  /*  TAG 17: WeakMap */
+  /*  TAG 14: Constructor Environment */
   'use strict'
-  const _name = Symbol('Name');
   class Human{
     constructor(name) {
-     this[_name] = name;
-    }
-    get name () {
-      return this[_name];
-    }
-    set name (name) {
-      this[_name] = name;
+      Object.assign(this, {
+        getName () {
+          return name;
+        },
+        setName (_name){
+          name = _name;
+        } 
+      });
     }
   }
-  const albert = new Human("Albert Hoffman");
-  console.log(albert.name);
-  albert.name = "Hoffman Albert";
-  console.log(albert.name);
-  console.log(albert._name);
+  const billy = new Human("Billy");
+  console.log(billy.name);
+  console.log(billy.getName());
+  billy.setName("Juancho");
+  console.log(billy.getName());
 }());
