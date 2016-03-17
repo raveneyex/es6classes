@@ -266,3 +266,123 @@
   console.log(Object.getPrototypeOf(molly) === Human.prototype); //[[Prototype]] of molly is Human.prototype
 
 }());
+
+(()=>{
+  /*  TAG 13 */
+  'use strict'
+  class Human{
+    constructor(name) {
+      this._name = name;
+    }
+  }
+  class Cyborg extends Human{
+    constructor(name, enhancement){
+      super(name);
+      this._enhancement = enhancement;
+    }
+  }
+  const molly = new Cyborg("Molly", "Hypervision");
+  console.log(Human instanceof Function); 
+  console.log(molly instanceof Human); 
+  console.log(molly instanceof Cyborg);
+  console.log(Human.prototype instanceof Object); 
+  console.log(Cyborg.prototype instanceof Human);
+  console.log(Human === Human.prototype.constructor);
+  console.log(Cyborg === Cyborg.prototype.constructor);
+  console.log(Object.getPrototypeOf(Cyborg) === Human);
+  console.log(Object.getPrototypeOf(Human) === Function.prototype);
+  console.log(Object.getPrototypeOf(molly) === Cyborg.prototype);
+  console.log(Object.getPrototypeOf(Cyborg.prototype) === Human.prototype);
+  console.log(Object.getPrototypeOf(Human.prototype) === Object.prototype);
+}());
+
+(()=>{
+  /*  TAG 14: Constructor Environment */
+  'use strict'
+  class Human{
+    constructor(name) {
+      Object.assign(this, {
+        getName () {
+          return name;
+        },
+        setName (_name){
+          name = _name;
+        } 
+      });
+    }
+  }
+  const billy = new Human("Billy");
+  console.log(billy.name);
+  console.log(billy.getName());
+  billy.setName("Juancho");
+  console.log(billy.getName());
+}());
+
+(()=>{
+  /*  TAG 15: Constructor Environment */
+  'use strict'
+  class Human{
+    constructor(name) {
+      this._name = name;
+    }
+    get name () {
+      return this._name;
+    }
+    set name (name) {
+      this._name = name;
+    }
+  }
+  const barack = new Human("Barack");
+  console.log(barack._name);
+  console.log(barack.name);
+  barack.name = "Obama";
+  console.log(barack.name);
+  console.log(barack._name);
+  barack._name = "Hussein";
+  console.log(barack.name);
+}());
+
+(()=>{
+  /*  TAG 16: WeakMap */
+  'use strict'
+  const _name = new WeakMap();
+  class Human{
+    constructor(name) {
+      _name.set(this, name);
+    }
+    get name () {
+      return _name.get(this);
+    }
+    set name (name) {
+      _name.set(this, name);
+    }
+  }
+  const albert = new Human("Albert Hoffman");
+  console.log(albert.name);
+  albert.name = "Hoffman Albert";
+  console.log(albert.name);
+  console.log(albert._name);
+}());
+
+(()=>{
+  /*  TAG 17: WeakMap */
+  'use strict'
+  const _name = Symbol('Name');
+  class Human{
+    constructor(name) {
+     this[_name] = name;
+    }
+    get name () {
+      return this[_name];
+    }
+    set name (name) {
+      this[_name] = name;
+    }
+  }
+  const albert = new Human("Albert Hoffman");
+  console.log(albert.name);
+  albert.name = "Hoffman Albert";
+  console.log(albert.name);
+  console.log(albert._name);
+}());
+
