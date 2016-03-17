@@ -50,45 +50,210 @@
             <section>
                 <section>
                     <h1>Base Classes</h1>
-                    <h3>The most basic Class use-case</h3>
+                    <pre>
+                        <code class="hljs">
+    class Human {
+        constructor(name){
+          this.name = name;
+        }
+
+        identify() {
+          return `Hello, I'm ${this.name}`;
+        }
+    }
+
+    const d00d = new Human('d00d');
+    console.log(d00d.identify());
+    console.log(d00d instanceof Human);
+                        </code>
+                    </pre>
                 </section>
 
                 <section>
-                    <h1>CLASS DEFINITION</h1>
+                    <h1>Base Classes</h1>
+                    <p>Classes aren't something radically new in JS.</p>
+                    <p>ES6 Classes are just a more concise way to declare constructor functions</p>
+                    <pre>
+                        <code class="hljs">
+    > console.log(typeof(Human));
+    function
+                        </code>
+                    </pre>
+                </section>
+
+                <section>
+                    <h1>Class Definition</h1>
                     <h3>Class declarations and Class expressions</h3>
+                    <p>Similarly to functions, there are two kinds of class definitions:</p> 
+                    <p>class declarations and class expressions</p>
                 </section>
 
                 <section>
-                    <h1>CLASS EXPRESSIONS</h1>
+                    <h1>Class Expressions</h1>
+                    <p>Class expressions can be anonymous:</p>
+                    <pre>
+                        <code class="hljs">
+    const MyHuman = class {
+        constructor(name){
+          this.name = name;
+        }
+
+        identify() {
+          return `Hello, I'm ${this.name}`;
+        }
+    };
+    const myHumanInstance = new MyHuman('Molly Millions');
+    console.log(myHumanInstance.identify());
+                        </code>
+                    </pre>
                 </section>
 
                 <section>
-                    <h1>CLASS DECLARATIONS</h1>
+                    <h1>Class Expressions</h1>
+                    <p>Class expressions can have inner names only visible to them:</p>
+                    <pre>
+                        <code class="hljs">
+    const MyHuman = class Human {
+        constructor(name){
+          this.name = name;
+        }
+
+        identify() {
+          return `Hello, I'm ${this.name} and I'm a ${Human.name}`;
+        }
+    };
+    const myHumanInstance = new MyHuman('Jonny Mnemonic');
+    console.log(myHumanInstance.identify());
+    console.log(MyHuman.name);
+    console.log(Human.name); //ReferenceError
+                        </code>
+                    </pre>
                 </section>
 
                 <section>
-                    <h1>THE CONSTRUCTOR</h1>
+                    <h1>Class Declarations</h1>
+                    <pre>
+                        <code class="hljs">
+    class Human {
+        constructor(name){
+          this.name = name;
+        }
+
+        static sayRace() {
+          return Human.name;
+        }
+
+        identify() {
+          return `Hello, I'm ${this.name}`;
+        }
+    }
+                        </code>
+                    </pre>
                 </section>
 
                 <section>
-                    <h1>STATIC METHODS</h1>
+                    <h2>The Constructor</h2>
+                    <p>This is a special method, as it defines the <span class="code-inline">function</span> that represents the Class.</p>
+                    <p>There can only be one <span class="code-inline">constructor</span> per Class definition</p>
+                    <pre>
+                        <code class="hljs">
+    constructor(name){
+        this.name = name;
+    }
+    ...
+    console.log(Human === Human.prototype.constructor);
+                        </code>
+                    </pre>
                 </section>
 
                 <section>
-                    <h1>PROTOTYPE METHODS</h1>
+                    <h2>Static Methods</h2>
+                    <p>Also called static properties or class properties, are properties of the Class itself and not its instances.</p>
+                    <p>Created by prefixing a method with <span class="code-inline">static</span>.</p>
+                    <pre>
+                        <code class="hljs">
+    static sayRace() {
+        return Human.name;
+    }
+    ...
+    console.log(Human.sayRace());
+    console.log(typeof(Human.sayRace));
+                        </code>
+                    </pre>
                 </section>
 
                 <section>
-                    <h1>GETTERS &amp; SETTERS</h1>
+                    <h2>Prototype Methods</h2>
+                    <p>They are the methods defined in the Class declaration body; they are inherited by instances of the class.</p>
+                    <p>Called <span class="code-inline">prototype methods</span> because they will be properties of the Class <span class="code-inline">prototype</span> (more on this later).</p>
+                    <pre>
+                        <code class="hljs">
+    identify() {
+        return `Hello, I'm ${this.name}`;
+    }
+    ...
+    console.log(typeof(Human.prototype.identify));
+    console.log(Human.prototype.identify()); //Don't do this. Just an example!
+    console.log(bobby.identify());
+                        </code>
+                    </pre>
                 </section>
 
                 <section>
-                    <h1>COMPUTED METHOD NAMES</h1>
+                    <h1>Getters &amp; Setters</h1>
+                    <p>Their syntax is just like getters &amp; setters from ES5 Object Literals</p>
+                    <pre>
+                        <code class="hljs">
+    constructor(name){
+        this._name = name;
+    }
+    get name() {
+        return this._name;
+    }
+    set name(name) {
+        this._name = name;
+    }
+    ...
+    const cayce = new Human('Cayce Pollard');
+    console.log(cayce.name);
+    console.log(cayce._name);
+    cayce.name = "Pollard Cayce";
+    console.log(cayce.name);
+    console.log(cayce._name);
+                        </code>
+                    </pre>
                 </section>
 
                 <section>
-                    <h1>FACTOIDS</h1>
-                    <h3>//Not hoisted, etc..</h3>
+                    <h1>Computed Method Names</h1>
+                    <p>Use expressions to define prototype method names by inserting them into square brackets</p>
+                    <pre>
+                        <code class="hljs">
+class Human {
+    constructor(name){
+        this._name = name;
+    }
+
+    ['id'+'entify']() {
+        return `Hello, I'm ${this._name}`;
+    }
+}
+const rei = new Human('Rei Toei');
+console.log(rei.identify());
+                        </code>
+                    </pre>
+                </section>
+
+                <section>
+                    <h1>Factoids</h1>
+                    <ul>
+                        <li><p>ES6 Classes are NOT hoisted. You cannot use them before their evaluation</p></li>
+                        <li><p>A Class definition is actually a function, but you HAVE to call it with the <span class="code-inline">new</span> operator</p></li>
+                        <li>
+                            <p>There are no separators between members of a Class definition.</p>
+                            <p><span class="code-inline">;</span> are ignored and <span class="code-inline">,</span> result in SyntaxError</p>
+                        </li>
+                    </ul>
                 </section>
             </section>
 
