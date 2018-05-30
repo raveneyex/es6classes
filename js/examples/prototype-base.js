@@ -14,4 +14,4 @@
   console.log(Object.getPrototypeOf(Human) === Function.prototype); //[[Prototype]] of Human is Function.prototype
   console.log(Object.getPrototypeOf(Human.prototype) === Object.prototype); //[[Prototype]] of Human.prototype is Object.prototype
   console.log(Object.getPrototypeOf(molly) === Human.prototype); //[[Prototype]] of molly is Human.prototype
-}());
+})();

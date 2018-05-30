@@ -24,4 +24,4 @@
   console.log(typeof(Human.prototype.identify));
   console.log(Human.prototype.identify());
   console.log(typeof(Human.prototype));
-}());
+})();
